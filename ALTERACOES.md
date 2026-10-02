@@ -65,3 +65,9 @@ O `index.html` e a paleta foram alinhados aos arquivos de referência enviados (
 - Dentro do orçamento também é possível adicionar linhas manuais, editar descrição, quantidade e valor unitário, ou remover linhas.
 - Subtotal, total de cada linha e total geral são recalculados automaticamente.
 - O texto copiado/enviado pelo WhatsApp inclui todos os itens da lista.
+
+## Rodapé atualizado
+
+- Substituído “Financeiro Flip” por **Nosso site**: https://flipdesignsolucoes3d.github.io/site/.
+- Substituído o e-mail por **Catálogo**: https://flipdesignsolucoes3d.github.io/site/catalogo.html.
+- O Instagram continua clicável, mas exibe somente o texto **Instagram**, sem o @handle.

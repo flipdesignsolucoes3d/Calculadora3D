@@ -510,10 +510,10 @@ function applyStoreBranding(settings) {
       .replace(/^@/, "")
       .replace(/\/$/, "");
     link.href = `https://www.instagram.com/${handle}`;
-    handleEl.textContent = `@${handle}`;
+    handleEl.textContent = "Instagram";
   } else {
     link.href = "https://www.instagram.com/flip_design_solucoes3d";
-    handleEl.textContent = "@flip_design_solucoes3d";
+    handleEl.textContent = "Instagram";
   }
 }
 
