@@ -1,0 +1,39 @@
+# Atualização visual — Flip Design & Soluções 3D
+
+## Referência aplicada
+
+O `index.html` e a paleta foram alinhados aos arquivos de referência enviados (`pasted_content_2.txt` e `pasted_content.txt`). A versão final usa o layout da calculadora Flip, fundo preto quente, superfícies marrom-escuras, textos creme e verde-limão da marca.
+
+## Alterações realizadas
+
+- Substituído o `index.html` pelo HTML completo da referência, incluindo o título “Calculadora — Flip”, a marca curta “Flip” e o popup do Financeiro Flip.
+- Substituído o `style.css` pelo CSS completo da referência verde-limão.
+- Atualizadas as cores de tema do `index.html` e do `manifest.json` para `#120E09`.
+- Restaurado `assets/logo.png` com o símbolo oficial verde da Flip.
+- Restaurado `assets/favicon.png` com o favicon oficial verde da Flip.
+- Recriados `assets/icon-192.png` e `assets/icon-512.png` a partir do favicon oficial.
+- Conferidas as referências do HTML: favicon em `assets/favicon.png`, logo em `assets/logo.png`, Apple Touch Icon e PWA em `assets/icon-192.png`.
+- Atualizado o cache do service worker para `flip-calc-v6-reference`, evitando que a versão dourada anterior permaneça instalada.
+- Mantidos os links do site, catálogo e Instagram da Flip.
+- Mantida a lógica da calculadora e as chaves internas do `localStorage`, preservando históricos e configurações existentes.
+
+## Paleta principal
+
+- Fundo: `#120E09`
+- Fundo secundário: `#16110B`
+- Superfície: `#17130D`
+- Campos: `#1C170F`
+- Texto principal: `#F4EFE3`
+- Texto comum: `#C9C1B0`
+- Verde principal: `#7DC917`
+- Verde claro: `#B5E96E`
+- Verde escuro: `#55940E`
+- WhatsApp: `#25D366`
+
+## Validação
+
+- JavaScript validado com `node --check`.
+- Manifesto validado como JSON.
+- Arquivos de logo, favicon e ícones verificados como PNG.
+- Referências de assets conferidas no HTML e no manifesto.
+- Pacote ZIP testado com `unzip -t`.
