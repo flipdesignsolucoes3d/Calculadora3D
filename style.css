@@ -1317,3 +1317,19 @@ input[type="number"]{ -moz-appearance: textfield; appearance: textfield; }
 @media (prefers-reduced-motion: reduce){
   *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* Cabeçalho: separa a marca do subtítulo e evita sobreposição em telas estreitas. */
+.brand{ flex: 1 1 auto; min-width: 0; }
+.brand-text{ flex: 1 1 auto; gap: 3px; min-width: 0; }
+.brand-text strong{ display: block; line-height: 1.15; }
+.brand-tag{ display: block; line-height: 1.2; }
+@media (max-width: 600px){
+  .brand-text strong{ font-size: clamp(12px, 4vw, 16px); letter-spacing: -.015em; }
+  .brand-tag{ font-size: 9px; letter-spacing: .18em; }
+}
+@media (max-width: 400px){
+  .brand-mark{ width: 30px; height: 30px; }
+  .brand{ gap: 7px; }
+  .brand-text strong{ font-size: 12px; }
+  .brand-tag{ font-size: 8px; letter-spacing: .14em; }
+}

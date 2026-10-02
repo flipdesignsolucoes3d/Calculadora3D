@@ -17,6 +17,7 @@ O `index.html` e a paleta foram alinhados aos arquivos de referência enviados (
 - Mantidos os links do site e catálogo da Flip.
 - Adicionado o Instagram com a estrutura compatível com o JavaScript (`footerSocialLink`/`footerSocialHandle`), usando `@flip_design_solucoes3d` como padrão.
 - Rodapé atualizado com direitos autorais da Flip e ano automático usando `new Date().getFullYear()`.
+- Ajustado o cabeçalho para separar visualmente “Flip Design & Soluções 3D” de “Calculadora”, com espaçamento e regras responsivas para evitar sobreposição em celulares.
 - Mantida a lógica da calculadora e as chaves internas do `localStorage`, preservando históricos e configurações existentes.
 
 ## Paleta principal
