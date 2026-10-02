@@ -1,5 +1,5 @@
 /* =========================================================
-   FLIP — CALCULADORA V3 — script.js
+   FLIP DESIGN & SOLUÇÕES 3D — CALCULADORA — script.js
    Os dados de impressoras e materiais ficam embutidos aqui mesmo
    pro app funcionar 100% abrindo o index.html direto no navegador
    (e offline, instalado como app), sem servidor.
@@ -53,7 +53,7 @@ const PRINTERS = [
 // pela pessoa — ver getSelectedPrinter. A vida útil usa um padrão genérico.
 const CUSTOM_PRINTER_ID = "custom";
 const CUSTOM_PRINTER_LIFESPAN_HOURS = 8000;
-const CUSTOM_PRINTER_STORAGE_KEY = "flip_custom_printer";
+const CUSTOM_PRINTER_STORAGE_KEY = "np3d_custom_printer";
 
 // ---------------------------------------------------------
 // DADOS: FILAMENTOS (preço médio por kg em R$), agrupados por tipo.
@@ -252,7 +252,7 @@ function setMode(mode) {
     : "Material, energia e lucro — o essencial pra precificar.";
 
   setExpanded(proSection, mode === "profissional");
-  localStorage.setItem("flip_mode", mode);
+  localStorage.setItem("np3d_mode", mode);
 }
 
 function initModeSwitch() {
@@ -260,7 +260,7 @@ function initModeSwitch() {
     btn.addEventListener("click", () => setMode(btn.dataset.mode));
   });
 
-  const saved = localStorage.getItem("flip_mode");
+  const saved = localStorage.getItem("np3d_mode");
   setMode(saved === "profissional" ? "profissional" : "basico");
 }
 
@@ -442,7 +442,7 @@ function bindProCostEvents() {
 // preenchem automaticamente os campos correspondentes — sem travá-los,
 // a pessoa pode sempre sobrescrever na hora.
 // ---------------------------------------------------------
-const STORE_SETTINGS_KEY = "flip_store_settings";
+const STORE_SETTINGS_KEY = "np3d_store_settings";
 
 function defaultStoreSettings() {
   return {
@@ -491,6 +491,25 @@ function applyStoreSettingsToCalculator(settings, { onlyIfEmpty = false } = {}) 
 
   roundToggle.checked = settings.roundDefault !== false;
   roundToggle.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
+/** Troca o Instagram do rodapé pelo da loja configurada — ou mantém o padrão do projeto. */
+function applyStoreBranding(settings) {
+  const link = el("footerSocialLink");
+  const handleEl = el("footerSocialHandle");
+  const instagram = (settings.instagram || "").trim();
+
+  if (instagram) {
+    const handle = instagram
+      .replace(/^https?:\/\/(www\.)?instagram\.com\//i, "")
+      .replace(/^@/, "")
+      .replace(/\/$/, "");
+    link.href = `https://www.instagram.com/${handle}`;
+    handleEl.textContent = `@${handle}`;
+  } else {
+    link.href = "https://www.instagram.com/aliny_ssousa";
+    handleEl.textContent = "@aliny_ssousa";
+  }
 }
 
 /** Linha de assinatura (loja/cidade/WhatsApp/Instagram) pro texto do WhatsApp — só com o que estiver preenchido. */
@@ -543,6 +562,7 @@ function saveStoreSettings() {
 
   localStorage.setItem(STORE_SETTINGS_KEY, JSON.stringify(settings));
   applyStoreSettingsToCalculator(settings, { onlyIfEmpty: true });
+  applyStoreBranding(settings);
   updateLaborHint();
   recalcAutoShopee();
   recalcAutoMeli();
@@ -559,6 +579,7 @@ function restoreStoreSettingsDefaults() {
   el("settingsRoundToggle").checked = true;
   updateSettingsRoundText();
 
+  applyStoreBranding(defaultStoreSettings());
   updateLaborHint();
   recalcAutoShopee();
   recalcAutoMeli();
@@ -585,6 +606,7 @@ function initSettingsModal() {
   // aplica as preferências salvas assim que a página carrega
   const settings = loadStoreSettings();
   applyStoreSettingsToCalculator(settings);
+  applyStoreBranding(settings);
 }
 
 // ---------------------------------------------------------
@@ -1949,8 +1971,8 @@ async function buildAndSavePdf(JsPDF, r) {
   const marginX = 18;
   let y;
 
-  // Faixa escura no topo com o logo, nas cores da marca (verde sobre preto)
-  doc.setFillColor(18, 14, 9);
+  // Faixa escura no topo com o logo, nas cores da marca (dourado sobre preto)
+  doc.setFillColor(14, 11, 7);
   doc.rect(0, 0, pageWidth, 30, "F");
 
   try {
@@ -1960,7 +1982,7 @@ async function buildAndSavePdf(JsPDF, r) {
     // Sem problema seguir sem o logo — não impede a geração do PDF
   }
 
-  doc.setTextColor(181, 233, 110);
+  doc.setTextColor(232, 200, 115);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(15);
   doc.text("Flip Design & Soluções 3D", marginX + 20, 15);
@@ -1987,7 +2009,7 @@ async function buildAndSavePdf(JsPDF, r) {
   const drawSectionTitle = (title) => {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11.5);
-    doc.setTextColor(74, 127, 12);
+    doc.setTextColor(138, 106, 18);
     doc.text(title.toUpperCase(), marginX, y);
     y += 1.5;
     doc.setDrawColor(230, 220, 200);
@@ -2030,7 +2052,7 @@ async function buildAndSavePdf(JsPDF, r) {
   y += 4;
 
   // Preço final em destaque, num cartão colorido
-  doc.setFillColor(240, 247, 226);
+  doc.setFillColor(248, 240, 220);
   doc.roundedRect(marginX, y, pageWidth - marginX * 2, 20, 3, 3, "F");
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10.5);
@@ -2053,7 +2075,7 @@ async function buildAndSavePdf(JsPDF, r) {
     doc.text(signature, marginX, y);
     y += 6;
   }
-  doc.text("Orçamento gerado com a calculadora Flip — gratuita, feita para quem vive de impressão 3D.", marginX, y, { maxWidth: pageWidth - marginX * 2 });
+  doc.text("Orçamento gerado com a calculadora Flip Design & Soluções 3D — gratuita, feita para a comunidade 3D.", marginX, y, { maxWidth: pageWidth - marginX * 2 });
 
   doc.save(`${exportFileBaseName(r)}.pdf`);
 }
@@ -2259,11 +2281,11 @@ async function copyBudget() {
 // Aplica o tema salvo já na leitura do script (antes da primeira pintura),
 // pra quem usa o tema claro não ver a página "piscar" escura.
 try {
-  if (localStorage.getItem("flip_theme") === "light") document.documentElement.setAttribute("data-theme", "light");
+  if (localStorage.getItem("np3d_theme") === "light") document.documentElement.setAttribute("data-theme", "light");
 } catch (err) { /* sem problema */ }
 
 function initTheme() {
-  const saved = localStorage.getItem("flip_theme");
+  const saved = localStorage.getItem("np3d_theme");
   if (saved === "light") applyTheme("light");
 
   el("themeToggle").addEventListener("click", () => {
@@ -2282,7 +2304,7 @@ function applyTheme(theme) {
     el("iconMoon").style.display = "inline-block";
     el("iconSun").style.display = "none";
   }
-  localStorage.setItem("flip_theme", theme);
+  localStorage.setItem("np3d_theme", theme);
 
   // barra do navegador/sistema acompanha o fundo do tema
   const themeColor = document.querySelector('meta[name="theme-color"]');
@@ -2467,12 +2489,12 @@ function restoreFormState(state) {
 // Rascunho antigo (versões anteriores guardavam o formulário entre visitas).
 // Hoje cada vez que a calculadora abre é um cálculo novo — só limpa o que
 // tiver sobrado no aparelho.
-const LEGACY_DRAFT_KEY = "flip_draft";
+const LEGACY_DRAFT_KEY = "np3d_draft";
 
 // ---------------------------------------------------------
 // MEUS ORÇAMENTOS — histórico salvo no aparelho (localStorage)
 // ---------------------------------------------------------
-const HISTORY_KEY = "flip_history";
+const HISTORY_KEY = "np3d_history";
 const HISTORY_LIMIT = 60;
 
 function loadHistory() {
@@ -2851,7 +2873,7 @@ function initInstallPrompt() {
     || window.navigator.standalone === true;
   if (isStandalone) return; // já instalado, não precisa mostrar nada
 
-  const wasDismissed = localStorage.getItem("flip_install_banner_dismissed") === "1";
+  const wasDismissed = localStorage.getItem("np3d_install_banner_dismissed") === "1";
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
 
   function showInstallUI() {
@@ -2866,7 +2888,7 @@ function initInstallPrompt() {
 
   dismissBtn.addEventListener("click", () => {
     banner.hidden = true;
-    localStorage.setItem("flip_install_banner_dismissed", "1");
+    localStorage.setItem("np3d_install_banner_dismissed", "1");
   });
 
   if (isIOS) {
@@ -2914,7 +2936,7 @@ function initInstallPrompt() {
 // limpa), no máximo 1x por semana: a data em que foi mostrado fica no
 // localStorage e ele só volta depois de FREE_POPUP_INTERVAL_MS.
 // ---------------------------------------------------------
-const FREE_POPUP_KEY = "flip_free_popup_last_shown";
+const FREE_POPUP_KEY = "np3d_free_popup_last_shown";
 const FREE_POPUP_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000; // 7 dias
 let freeBannerScheduled = false;
 
@@ -2926,7 +2948,7 @@ function initFreeBanner() {
   const overlay = el("freeBanner");
   el("closeFreeBanner").addEventListener("click", closeFreeBanner);
   el("freePopupLater").addEventListener("click", closeFreeBanner);
-  // o link abre o Financeiro Flip em outra aba; aqui só tira o popup do caminho
+  // o link abre o Instagram em outra aba; aqui só tira o popup do caminho
   el("freePopupFollow").addEventListener("click", closeFreeBanner);
   overlay.addEventListener("click", (event) => {
     if (event.target === overlay) closeFreeBanner();

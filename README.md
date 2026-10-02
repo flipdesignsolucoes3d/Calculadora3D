@@ -1,11 +1,12 @@
-# Flip — Calculadora
+# Flip Design & Soluções 3D — Calculadora
 
 Calculadora gratuita de preço para impressão 3D (filamento): material, energia,
 desgaste da máquina, mão de obra, embalagem, taxas da Shopee e do Mercado Livre,
 frete, impostos e lucro. Gera o orçamento pronto para o WhatsApp e em PDF.
 
-Da **Flip Design & Soluções 3D**, com a mesma identidade visual do
-[Financeiro Flip](https://flipdesignsolucoes3d.github.io/financeiro/).
+Publicada em **https://flipdesignsolucoes3d.github.io/calculadora/**, com a mesma identidade
+visual do [site](https://flipdesignsolucoes3d.github.io/site/) e do
+[catálogo](https://flipdesignsolucoes3d.github.io/site/catalogo.html).
 
 HTML + CSS + JavaScript puro: sem build, sem dependências e sem servidor.
 
@@ -14,7 +15,7 @@ HTML + CSS + JavaScript puro: sem build, sem dependências e sem servidor.
 ## Estrutura
 
 ```
-flip-calculadora/
+calc-3d/
 ├── index.html          → estrutura da página e modais
 ├── style.css           → identidade visual (tokens de cor, tipografia, componentes)
 ├── script.js           → dados, cálculo, histórico, WhatsApp/PDF e interações
@@ -57,8 +58,8 @@ os orçamentos em "Meus orçamentos", as Configurações da loja, o tema, o modo
 
 ## Segurança
 
-- Content Security Policy no `index.html`: só roda script do próprio site e do
-  cdnjs (gerador de PDF).
+- Content Security Policy no `index.html`: só roda script do próprio site, do
+  cdnjs (gerador de PDF) e das estatísticas da Cloudflare.
 - O jsPDF é carregado só no primeiro clique em "PDF", com verificação de
   integridade (SRI). **Ao trocar a versão do jsPDF, atualize `JSPDF_SRI`** no
   `script.js` (o hash oficial está em cdnjs.com).
@@ -70,3 +71,8 @@ Basta enviar as alterações para a branch `main`: o GitHub Pages publica sozinh
 em 1 ou 2 minutos. O service worker busca os arquivos do app na rede primeiro,
 então quem já usa recebe a versão nova sem precisar limpar o cache. Ao mudar
 ícones ou imagens, troque o `CACHE_NAME` no `service-worker.js`.
+
+## Versões salvas (tags do Git)
+
+- `estavel-2026-09-23`: V1, paleta violeta/ciano original
+- `backup-tons-dourados`: V2, preto e dourado
