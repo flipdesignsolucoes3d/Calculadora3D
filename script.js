@@ -1354,14 +1354,10 @@ function syncMaterialUI(prefillPrice) {
 // separador — o resto do código continua lendo com parseFloat/Number.
 // ---------------------------------------------------------
 function sanitizeDecimal(raw) {
-  // O ponto é só separador de milhar (visual) e é sempre removido;
-  // a vírgula é o único separador decimal, e vira ponto no fim pro
-  // parseFloat/Number entenderem. Sem isso, "3.000" (três mil) virava
-  // "3.000" → parseFloat lia 3 (três) em vez de 3000.
-  let value = String(raw).replace(/\./g, "").replace(/[^\d,]/g, "");
-  const comma = value.indexOf(",");
-  if (comma >= 0) value = value.slice(0, comma + 1) + value.slice(comma + 1).replace(/,/g, "");
-  return value.replace(",", ".");
+  let value = String(raw).replace(/,/g, ".").replace(/[^\d.]/g, "");
+  const dot = value.indexOf(".");
+  if (dot >= 0) value = value.slice(0, dot + 1) + value.slice(dot + 1).replace(/\./g, "");
+  return value;
 }
 
 // Fase de captura: normaliza antes de qualquer outro listener ler o valor.
