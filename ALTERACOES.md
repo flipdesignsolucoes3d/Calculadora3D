@@ -14,7 +14,9 @@ O `index.html` e a paleta foram alinhados aos arquivos de referência enviados (
 - Recriados `assets/icon-192.png` e `assets/icon-512.png` a partir do favicon oficial.
 - Conferidas as referências do HTML: favicon em `assets/favicon.png`, logo em `assets/logo.png`, Apple Touch Icon e PWA em `assets/icon-192.png`.
 - Atualizado o cache do service worker para `flip-calc-v6-reference`, evitando que a versão dourada anterior permaneça instalada.
-- Mantidos os links do site, catálogo e Instagram da Flip.
+- Mantidos os links do site e catálogo da Flip.
+- Adicionado o Instagram com a estrutura compatível com o JavaScript (`footerSocialLink`/`footerSocialHandle`), usando `@flip_design_solucoes3d` como padrão.
+- Rodapé atualizado com direitos autorais da Flip e ano automático usando `new Date().getFullYear()`.
 - Mantida a lógica da calculadora e as chaves internas do `localStorage`, preservando históricos e configurações existentes.
 
 ## Paleta principal

@@ -507,8 +507,8 @@ function applyStoreBranding(settings) {
     link.href = `https://www.instagram.com/${handle}`;
     handleEl.textContent = `@${handle}`;
   } else {
-    link.href = "https://www.instagram.com/aliny_ssousa";
-    handleEl.textContent = "@aliny_ssousa";
+    link.href = "https://www.instagram.com/flip_design_solucoes3d";
+    handleEl.textContent = "@flip_design_solucoes3d";
   }
 }
 
@@ -2978,6 +2978,8 @@ function showFreeBanner() {
 // INICIALIZAÇÃO
 // ---------------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
+  const currentYear = el("currentYear");
+  if (currentYear) currentYear.textContent = String(new Date().getFullYear());
   populateSelects();
   populateProCosts();
   initTheme();
