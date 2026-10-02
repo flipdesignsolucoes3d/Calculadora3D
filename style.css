@@ -1350,8 +1350,10 @@ input[type="number"]{ -moz-appearance: textfield; appearance: textfield; }
 .professional-quote{ max-width:860px; margin:0 auto; padding:42px 48px; background:#fffdf9; color:#17130d; font-family:var(--sans); box-shadow:0 12px 35px rgba(0,0,0,.22); }
 .professional-quote-head{ display:flex; justify-content:space-between; gap:20px; padding-bottom:24px; border-bottom:2px solid #17130d; }
 .professional-brand{ display:flex; flex-direction:column; gap:4px; }
-.professional-brand strong{ font-family:var(--serif); font-size:32px; letter-spacing:.12em; line-height:1; color:#17130d; }
-.professional-brand span{ font-size:11px; letter-spacing:.08em; color:#5c6650; text-transform:uppercase; }
+.professional-brand-line{ display:flex; align-items:center; gap:10px; }
+.professional-brand-line img{ width:34px; height:34px; object-fit:contain; flex-shrink:0; }
+.professional-brand strong{ font-family:var(--serif); font-size:25px; letter-spacing:.02em; line-height:1.08; color:#17130d; }
+.professional-brand span{ max-width:610px; font-size:10px; line-height:1.55; letter-spacing:.06em; color:#5c6650; text-transform:uppercase; }
 .professional-brand b{ color:#7dc917; }
 .professional-meta{ display:flex; flex-direction:column; align-items:flex-end; gap:5px; color:#6d7467; font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-align:right; }
 .professional-meta b{ color:#17130d; }
@@ -1381,6 +1383,8 @@ input[type="number"]{ -moz-appearance: textfield; appearance: textfield; }
   .quote-modal-card{ padding:16px; }
   .professional-quote{ padding:28px 22px; }
   .professional-quote-head{ flex-direction:column; }
+  .professional-brand-line{ align-items:flex-start; }
+  .professional-brand strong{ font-size:22px; }
   .professional-meta{ align-items:flex-start; text-align:left; }
   .professional-table{ font-size:10px; }
   .professional-table th,.professional-table td{ padding:9px 4px; }

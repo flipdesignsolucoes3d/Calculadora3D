@@ -2169,7 +2169,7 @@ function buildProfessionalQuoteText() {
   const unit1 = quoteNumberValue("quoteUnit1"); const unit2 = quoteNumberValue("quoteUnit2");
   const freight = quoteNumberValue("quoteFreight"); const subtotal = qty1 * unit1 + qty2 * unit2; const total = subtotal + freight;
   return [
-    "*FLIP*", "Impressão 3D • Design & Soluções", "",
+    "*Flip Design & Soluções 3D*", "Impressão 3D • Modelagem 3D • Prototipagem • Personalização • Peças Sob Medida • Miniaturas • Brindes Personalizados • Projetos 3D", "",
     `*ORÇAMENTO Nº:* ${quoteInputValue("quoteNumber", "0001")}`, `*DATA:* ${quoteDateLabel(quoteInputValue("quoteDate"))}`, "",
     "*DADOS DO CLIENTE*", `*Cliente:* ${quoteInputValue("quoteClient", "Nome do cliente")}`, `*Contato:* ${quoteInputValue("quoteContact", "(XX) XXXXX-XXXX")}`, "",
     "*ORÇAMENTO*", "Soluções personalizadas em impressão 3D, desenvolvidas para transformar ideias em produtos.", "",
@@ -2180,7 +2180,7 @@ function buildProfessionalQuoteText() {
     `*Prazo de produção:* ${quoteInputValue("quoteDays", "XX") || "XX"} dias úteis após a aprovação do orçamento e confirmação do pagamento da entrada.`, "",
     "*OBSERVAÇÕES*", "- O prazo de produção começa a contar após a aprovação do orçamento e pagamento da entrada.",
     "- Alterações no projeto após a aprovação poderão gerar custos adicionais.", "- Orçamento válido por *7 dias*.", "",
-    "*FLIP — Design & Soluções 3D*", "Transformando ideias em realidade.",
+    "*Flip Design & Soluções 3D*", "Transformando ideias em realidade.",
   ].join("\n");
 }
 
@@ -2330,6 +2330,9 @@ function buildWhatsAppText(r) {
     : [];
 
   const lines = [
+    `*Flip Design & Soluções 3D*`,
+    `Impressão 3D • Modelagem 3D • Prototipagem • Personalização • Peças Sob Medida • Miniaturas • Brindes Personalizados • Projetos 3D`,
+    ``,
     `🧾 *Orçamento — ${r.jobName}*`,
     ``,
     `🖨️ Impressora: ${r.printerName}`,

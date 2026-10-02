@@ -49,3 +49,9 @@ O `index.html` e a paleta foram alinhados aos arquivos de referência enviados (
 - Incluídas as ações **Imprimir / PDF**, **Copiar orçamento** e **Enviar pelo WhatsApp**.
 - A impressão usa uma folha A4 limpa, ocultando os controles e mantendo apenas o documento comercial.
 - Cache PWA atualizado para `flip-calc-v7-professional-quote`.
+
+## Identidade do orçamento e WhatsApp
+
+- O cabeçalho do orçamento agora usa o logo original da Flip (`assets/logo.png`) junto do nome **Flip Design & Soluções 3D**.
+- A linha de atividades foi atualizada para: Impressão 3D • Modelagem 3D • Prototipagem • Personalização • Peças Sob Medida • Miniaturas • Brindes Personalizados • Projetos 3D.
+- O texto enviado pelo WhatsApp passou a usar a mesma marca e a mesma lista de atividades.
