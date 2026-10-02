@@ -170,6 +170,7 @@ const copyBtn           = el("copyBtn");
 const copyBtnLabel      = el("copyBtnLabel");
 const exportPdfBtn      = el("exportPdfBtn");
 const exportPdfBtnLabel = el("exportPdfBtnLabel");
+const quoteBtn          = el("quoteBtn");
 const proItemGrid       = el("proItemGrid");
 const proSection        = el("proSection");
 
@@ -1802,6 +1803,7 @@ function renderResult(r) {
   copyBtn.classList.remove("copied");
   copyBtnLabel.textContent = "Copiar";
   exportPdfBtn.disabled = false;
+  quoteBtn.disabled = false;
   el("saveBtn").disabled = false;
   el("saveBtnLabel").textContent = currentBudgetId ? "Salvo" : "Salvar";
   hidePdfExportError();
@@ -2100,6 +2102,109 @@ async function exportPdf() {
 }
 
 // ---------------------------------------------------------
+// ORÇAMENTO PROFISSIONAL — modelo comercial editável
+// ---------------------------------------------------------
+let professionalQuoteHydrated = false;
+
+function quoteNumberValue(id) {
+  const raw = (el(id)?.value || "").trim().replace(/\s/g, "");
+  if (raw.includes(",")) return Number(raw.replace(/\./g, "").replace(",", ".")) || 0;
+  return Number(raw) || 0;
+}
+
+function quoteMoney(value) { return brl(Math.max(0, Number(value) || 0)); }
+
+function quoteDateLabel(value) {
+  const date = value ? new Date(`${value}T12:00:00`) : new Date();
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString("pt-BR");
+}
+
+function quoteInputValue(id, fallback = "") { return (el(id)?.value || fallback).trim(); }
+
+function updateProfessionalQuotePreview() {
+  if (!lastResult) return;
+  const qty1 = quoteNumberValue("quoteQty1");
+  const qty2 = quoteNumberValue("quoteQty2");
+  const unit1 = quoteNumberValue("quoteUnit1");
+  const unit2 = quoteNumberValue("quoteUnit2");
+  const freight = quoteNumberValue("quoteFreight");
+  const total1 = qty1 * unit1;
+  const total2 = qty2 * unit2;
+  const subtotal = total1 + total2;
+  const total = subtotal + freight;
+  const set = (id, value) => { const node = el(id); if (node) node.textContent = value; };
+  set("quotePreviewNumber", quoteInputValue("quoteNumber", "0001"));
+  set("quotePreviewDate", quoteDateLabel(quoteInputValue("quoteDate")));
+  set("quotePreviewClient", quoteInputValue("quoteClient", "Nome do cliente"));
+  set("quotePreviewContact", quoteInputValue("quoteContact", "(XX) XXXXX-XXXX"));
+  set("quotePreviewItem1", quoteInputValue("quoteItem1", "Nome/descrição do produto"));
+  set("quotePreviewItem2", quoteInputValue("quoteItem2", "—") || "—");
+  set("quotePreviewQty1", String(qty1)); set("quotePreviewQty2", String(qty2));
+  set("quotePreviewUnit1", quoteMoney(unit1)); set("quotePreviewUnit2", quoteMoney(unit2));
+  set("quotePreviewTotal1", quoteMoney(total1)); set("quotePreviewTotal2", quoteMoney(total2));
+  set("quotePreviewSubtotal", quoteMoney(subtotal)); set("quotePreviewFreight", quoteMoney(freight));
+  set("quotePreviewTotal", quoteMoney(total));
+  set("quotePreviewDays", quoteInputValue("quoteDays", "XX") || "XX");
+}
+
+function hydrateProfessionalQuote() {
+  if (!lastResult || professionalQuoteHydrated) return;
+  const today = new Date();
+  el("quoteDate").value = `${String(today.getDate()).padStart(2, "0")}/${String(today.getMonth() + 1).padStart(2, "0")}/${today.getFullYear()}`;
+  el("quoteItem1").value = lastResult.jobName || "Nome/descrição do produto";
+  el("quoteUnit1").value = lastResult.finalPrice.toFixed(2).replace(".", ",");
+  professionalQuoteHydrated = true;
+}
+
+function openProfessionalQuote() {
+  if (!lastResult) return;
+  hydrateProfessionalQuote(); updateProfessionalQuotePreview();
+  el("quoteModalOverlay").hidden = false;
+}
+
+function closeProfessionalQuote() { el("quoteModalOverlay").hidden = true; }
+
+function buildProfessionalQuoteText() {
+  const qty1 = quoteNumberValue("quoteQty1"); const qty2 = quoteNumberValue("quoteQty2");
+  const unit1 = quoteNumberValue("quoteUnit1"); const unit2 = quoteNumberValue("quoteUnit2");
+  const freight = quoteNumberValue("quoteFreight"); const subtotal = qty1 * unit1 + qty2 * unit2; const total = subtotal + freight;
+  return [
+    "*FLIP*", "Impressão 3D • Design & Soluções", "",
+    `*ORÇAMENTO Nº:* ${quoteInputValue("quoteNumber", "0001")}`, `*DATA:* ${quoteDateLabel(quoteInputValue("quoteDate"))}`, "",
+    "*DADOS DO CLIENTE*", `*Cliente:* ${quoteInputValue("quoteClient", "Nome do cliente")}`, `*Contato:* ${quoteInputValue("quoteContact", "(XX) XXXXX-XXXX")}`, "",
+    "*ORÇAMENTO*", "Soluções personalizadas em impressão 3D, desenvolvidas para transformar ideias em produtos.", "",
+    `01 · ${quoteInputValue("quoteItem1", "Nome/descrição do produto")} · ${qty1} · ${quoteMoney(unit1)} · ${quoteMoney(qty1 * unit1)}`,
+    `02 · ${quoteInputValue("quoteItem2", "—") || "—"} · ${qty2} · ${quoteMoney(unit2)} · ${quoteMoney(qty2 * unit2)}`, "",
+    `*Subtotal:* ${quoteMoney(subtotal)}`, `*Frete/Entrega:* ${quoteMoney(freight)}`, `*TOTAL: ${quoteMoney(total)}*`, "",
+    "*PAGAMENTO*", "*50% de entrada* no ato da aprovação do orçamento.", "*50% restantes* no dia da entrega do produto.",
+    `*Prazo de produção:* ${quoteInputValue("quoteDays", "XX") || "XX"} dias úteis após a aprovação do orçamento e confirmação do pagamento da entrada.`, "",
+    "*OBSERVAÇÕES*", "- O prazo de produção começa a contar após a aprovação do orçamento e pagamento da entrada.",
+    "- Alterações no projeto após a aprovação poderão gerar custos adicionais.", "- Orçamento válido por *7 dias*.", "",
+    "*FLIP — Design & Soluções 3D*", "Transformando ideias em realidade.",
+  ].join("\n");
+}
+
+async function copyProfessionalQuote() {
+  const text = buildProfessionalQuoteText();
+  try { await navigator.clipboard.writeText(text); }
+  catch (err) { const textarea = document.createElement("textarea"); textarea.value = text; textarea.style.position = "fixed"; textarea.style.opacity = "0"; document.body.appendChild(textarea); textarea.select(); document.execCommand("copy"); textarea.remove(); }
+  showQuickToast("Orçamento profissional copiado.");
+}
+
+function initProfessionalQuote() {
+  const overlay = el("quoteModalOverlay");
+  quoteBtn.addEventListener("click", openProfessionalQuote);
+  el("closeQuoteBtn").addEventListener("click", closeProfessionalQuote);
+  el("quotePrintBtn").addEventListener("click", () => window.print());
+  el("quoteCopyBtn").addEventListener("click", copyProfessionalQuote);
+  el("quoteWhatsappBtn").addEventListener("click", () => window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(buildProfessionalQuoteText())}`, "_blank", "noopener,noreferrer"));
+  overlay.addEventListener("click", (event) => { if (event.target === overlay) closeProfessionalQuote(); });
+  document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !overlay.hidden) closeProfessionalQuote(); });
+  ["quoteNumber","quoteDate","quoteClient","quoteContact","quoteItem1","quoteQty1","quoteUnit1","quoteItem2","quoteQty2","quoteUnit2","quoteFreight","quoteDays"]
+    .forEach((id) => el(id).addEventListener("input", updateProfessionalQuotePreview));
+}
+
+// ---------------------------------------------------------
 // LIMPAR TUDO — volta a página ao estado inicial, 100% vazio
 // ---------------------------------------------------------
 function clearAll() {
@@ -2191,10 +2296,12 @@ function resetReadout() {
   setReadoutLive(false);
 
   lastResult = null;
+  professionalQuoteHydrated = false;
   copyBtn.disabled = true;
   copyBtn.classList.remove("copied");
   copyBtnLabel.textContent = "Copiar";
   exportPdfBtn.disabled = true;
+  quoteBtn.disabled = true;
   el("saveBtn").disabled = true;
   el("saveBtnLabel").textContent = "Salvar";
   hidePdfExportError();
@@ -2308,7 +2415,7 @@ function applyTheme(theme) {
 
   // barra do navegador/sistema acompanha o fundo do tema
   const themeColor = document.querySelector('meta[name="theme-color"]');
-  if (themeColor) themeColor.setAttribute("content", theme === "light" ? "#F6F1E7" : "#0E0B07");
+  if (themeColor) themeColor.setAttribute("content", theme === "light" ? "#F6F1E7" : "#120E09");
 }
 
 // ---------------------------------------------------------
@@ -2989,6 +3096,7 @@ document.addEventListener("DOMContentLoaded", () => {
   registerServiceWorker();
   initInstallPrompt();
   initFreeBanner();
+  initProfessionalQuote();
   initHistory();
   try { localStorage.removeItem(LEGACY_DRAFT_KEY); } catch (err) { /* sem problema */ }
   initStickyBar();

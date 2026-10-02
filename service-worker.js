@@ -11,7 +11,7 @@
    contra versão antiga.
    ========================================================= */
 
-const CACHE_NAME = "flip-calc-v6-reference";
+const CACHE_NAME = "flip-calc-v7-professional-quote";
 
 const CORE_ASSETS = [
   "./",

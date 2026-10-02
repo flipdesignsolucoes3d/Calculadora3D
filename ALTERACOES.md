@@ -40,3 +40,12 @@ O `index.html` e a paleta foram alinhados aos arquivos de referência enviados (
 - Arquivos de logo, favicon e ícones verificados como PNG.
 - Referências de assets conferidas no HTML e no manifesto.
 - Pacote ZIP testado com `unzip -t`.
+
+## Modelo de orçamento profissional
+
+- Adicionado o botão **Orçamento** ao painel de resultado, habilitado após um cálculo válido.
+- Criado um modelo comercial premium com fundo off-white, tipografia limpa, detalhes em verde-limão e estrutura completa: identificação, dados do cliente, itens, subtotal, frete, total, pagamento, prazo, observações e rodapé institucional.
+- O modal permite editar número, data, cliente, contato, dois itens, frete e prazo.
+- Incluídas as ações **Imprimir / PDF**, **Copiar orçamento** e **Enviar pelo WhatsApp**.
+- A impressão usa uma folha A4 limpa, ocultando os controles e mantendo apenas o documento comercial.
+- Cache PWA atualizado para `flip-calc-v7-professional-quote`.
