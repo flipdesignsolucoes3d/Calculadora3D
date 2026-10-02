@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Calculadora — Flip Design &amp; Soluções 3D</title>
+<title>Calculadora — Flip</title>
 <meta name="description" content="Calculadora gratuita de preço para impressão 3D: filamento, energia, desgaste, mão de obra, taxas de marketplace e lucro — com orçamento pronto pro WhatsApp e PDF.">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0E0B07">
+<meta name="theme-color" content="#120E09">
 <meta name="color-scheme" content="dark light">
-<!-- Política de segurança: só roda script do próprio site, do cdnjs (gerador
-     de PDF, com SRI) e das estatísticas da Cloudflare; fontes só do Google. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cloudflareinsights.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<!-- Política de segurança: só roda script do próprio site e do cdnjs
+     (gerador de PDF, com SRI); fontes só do Google. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Flip 3D Calc">
+<meta name="apple-mobile-web-app-title" content="Flip Calc">
 
-<!-- Fontes da identidade Flip Design &amp; Soluções 3D (mesmas do site e do catálogo):
+<!-- Fontes da identidade Flip (mesmas do Financeiro Flip):
      Fraunces (títulos e preço), Work Sans (corpo) e JetBrains Mono (rótulos e números) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,10 +31,10 @@
 
   <!-- ===================== CABEÇALHO ===================== -->
   <header class="topbar">
-    <a class="brand" href="./" aria-label="Flip Design &amp; Soluções 3D — Calculadora">
+    <a class="brand" href="./" aria-label="Flip — Calculadora">
       <img class="brand-mark" src="assets/logo.png" alt="">
       <span class="brand-text">
-        <strong>Flip Design &amp; Soluções 3D</strong>
+        <strong>Flip</strong>
         <span class="brand-tag">Calculadora</span>
       </span>
     </a>
@@ -304,7 +304,7 @@
 
           <div class="readout-head">
             <span class="readout-status"><span class="readout-led" id="readoutLed" aria-hidden="true"></span><span id="readoutStatus">Aguardando dados</span></span>
-            <span class="readout-code">NP-3D</span>
+            <span class="readout-code">FLIP</span>
           </div>
 
           <div class="readout-main">
@@ -386,16 +386,8 @@
     <!-- ===================== RODAPÉ ===================== -->
     <footer class="site-footer">
       <div class="footer-links">
-        <a href="https://flipdesignsolucoes3d.github.io/site/" target="_blank" rel="noopener noreferrer">Nosso site <span aria-hidden="true">↗</span></a>
-        <a href="https://flipdesignsolucoes3d.github.io/site/catalogo.html" target="_blank" rel="noopener noreferrer">Catálogo <span aria-hidden="true">↗</span></a>
-        <a class="footer-social" id="footerSocialLink" href="https://www.instagram.com/aliny_ssousa" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/>
-            <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/>
-            <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/>
-          </svg>
-          <span id="footerSocialHandle">@aliny_ssousa</span>
-        </a>
+        <a href="https://flipdesignsolucoes3d.github.io/financeiro/" target="_blank" rel="noopener noreferrer">Financeiro Flip <span aria-hidden="true">↗</span></a>
+        <a href="mailto:flipdesign3dsolucoes@gmail.com">flipdesign3dsolucoes@gmail.com</a>
       </div>
 
       <p class="footer-verse">
@@ -403,7 +395,7 @@
         <span>Provérbios 16:3</span>
       </p>
 
-      <span class="footer-copy">© 2026 Flip Design &amp; Soluções 3D · Feita com amor pra quem vive de impressão 3D</span>
+      <span class="footer-copy">© 2026 Flip Design & Soluções 3D · Feita com amor pra quem vive de impressão 3D</span>
     </footer>
   </main>
 
@@ -528,7 +520,7 @@
       <div class="field-grid two-cols">
         <div class="field">
           <label for="settingsStoreName">Nome da loja</label>
-          <input type="text" id="settingsStoreName" placeholder="Ex: Flip Design Impressões">
+          <input type="text" id="settingsStoreName" placeholder="Ex: Flip Impressões">
         </div>
         <div class="field">
           <label for="settingsCity">Cidade</label>
@@ -563,15 +555,13 @@
       <span class="free-popup-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 20.3s-7.4-4.5-9.1-9.2C1.8 8 3.7 4.6 7.1 4.6c2 0 3.6 1.1 4.9 2.9 1.3-1.8 2.9-2.9 4.9-2.9 3.4 0 5.3 3.4 4.2 6.5-1.7 4.7-9.1 9.2-9.1 9.2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
       </span>
-      <h3 id="freePopupTitle">Gostou da calculadora?</h3>
-      <p class="free-popup-text">Ela é 100% gratuita, feita com carinho pra comunidade 3D. Se quiser apoiar, siga a gente no Instagram.</p>
-      <a id="freePopupFollow" class="btn-follow" href="https://www.instagram.com/aliny_ssousa" target="_blank" rel="noopener noreferrer">
+      <h3 id="freePopupTitle">Conheça o Financeiro Flip</h3>
+      <p class="free-popup-text">Assim como esta calculadora, o Financeiro Flip é gratuito e feito pra quem vive de impressão 3D — caixa, vendas e lucro em um só lugar.</p>
+      <a id="freePopupFollow" class="btn-follow" href="https://flipdesignsolucoes3d.github.io/financeiro/" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-          <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/>
-          <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/>
-          <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/>
+          <path d="M14 4h6v6M20 4 10 14M18 13v6H5V6h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Seguir @aliny_ssousa
+        Abrir Financeiro Flip
       </a>
       <button id="freePopupLater" class="free-popup-later" type="button">Agora não</button>
     </div>
@@ -581,6 +571,5 @@
   <div class="quick-toast" id="quickToast" hidden><span id="quickToastText"></span></div>
 
 <script src="script.js"></script>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7c4dac6d587541c68ef1da3bc17bf14c"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

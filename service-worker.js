@@ -1,17 +1,17 @@
 /* =========================================================
-   FLIP DESIGN & SOLUÇÕES 3D — service-worker.js
+   FLIP — service-worker.js
    Faz cache dos arquivos principais para o app funcionar
    offline depois de instalado, e é o que "habilita" o
    navegador a oferecer a instalação como PWA.
    Os arquivos centrais (index.html, script.js, style.css,
    manifest.json) usam estratégia "rede primeiro", então eles
    já chegam atualizados sozinhos quando a pessoa está online.
-   Mudar o CACHE_NAME (ex: flip-calc-v4) continua sendo uma
+   Mudar o CACHE_NAME (ex: flip-calc-v2) continua sendo uma
    segurança extra, mas não é mais a única linha de defesa
    contra versão antiga.
    ========================================================= */
 
-const CACHE_NAME = "flip-calc-v4";
+const CACHE_NAME = "flip-calc-v1";
 
 const CORE_ASSETS = [
   "./",
