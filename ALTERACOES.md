@@ -55,3 +55,13 @@ O `index.html` e a paleta foram alinhados aos arquivos de referência enviados (
 - O cabeçalho do orçamento agora usa o logo original da Flip (`assets/logo.png`) junto do nome **Flip Design & Soluções 3D**.
 - A linha de atividades foi atualizada para: Impressão 3D • Modelagem 3D • Prototipagem • Personalização • Peças Sob Medida • Miniaturas • Brindes Personalizados • Projetos 3D.
 - O texto enviado pelo WhatsApp passou a usar a mesma marca e a mesma lista de atividades.
+
+## Múltiplos itens no orçamento
+
+- Adicionado o botão **Adicionar item** ao resultado da calculadora.
+- Cada peça calculada pode ser guardada na fila e a calculadora fica pronta para calcular a próxima peça.
+- O painel mostra a quantidade e o resumo dos itens já acumulados.
+- O orçamento profissional monta automaticamente uma linha para cada item calculado.
+- Dentro do orçamento também é possível adicionar linhas manuais, editar descrição, quantidade e valor unitário, ou remover linhas.
+- Subtotal, total de cada linha e total geral são recalculados automaticamente.
+- O texto copiado/enviado pelo WhatsApp inclui todos os itens da lista.

@@ -171,6 +171,7 @@ const copyBtnLabel      = el("copyBtnLabel");
 const exportPdfBtn      = el("exportPdfBtn");
 const exportPdfBtnLabel = el("exportPdfBtnLabel");
 const quoteBtn          = el("quoteBtn");
+const addItemBtn        = el("addItemBtn");
 const proItemGrid       = el("proItemGrid");
 const proSection        = el("proSection");
 
@@ -197,6 +198,9 @@ function getSelectedPrinter() {
 
 // Guarda o último resultado calculado com sucesso, usado pelo botão "Copiar"
 let lastResult = null;
+// Itens já calculados e adicionados ao orçamento atual.
+let quoteItems = [];
+let quoteDraftItems = [];
 
 // id do orçamento aberto/salvo em "Meus orçamentos" (null = orçamento novo,
 // ainda não salvo). Enquanto houver um, recálculos atualizam o salvo.
@@ -1804,6 +1808,7 @@ function renderResult(r) {
   copyBtnLabel.textContent = "Copiar";
   exportPdfBtn.disabled = false;
   quoteBtn.disabled = false;
+  addItemBtn.disabled = false;
   el("saveBtn").disabled = false;
   el("saveBtnLabel").textContent = currentBudgetId ? "Salvo" : "Salvar";
   hidePdfExportError();
@@ -2102,7 +2107,7 @@ async function exportPdf() {
 }
 
 // ---------------------------------------------------------
-// ORÇAMENTO PROFISSIONAL — modelo comercial editável
+// ORÇAMENTO PROFISSIONAL — modelo comercial com múltiplos itens
 // ---------------------------------------------------------
 let professionalQuoteHydrated = false;
 
@@ -2113,75 +2118,119 @@ function quoteNumberValue(id) {
 }
 
 function quoteMoney(value) { return brl(Math.max(0, Number(value) || 0)); }
-
+function quoteInputValue(id, fallback = "") { return (el(id)?.value || fallback).trim(); }
 function quoteDateLabel(value) {
   const date = value ? new Date(`${value}T12:00:00`) : new Date();
   return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString("pt-BR");
 }
+function quoteEscape(value) {
+  return String(value ?? "").replace(/[&<>\"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[char]));
+}
 
-function quoteInputValue(id, fallback = "") { return (el(id)?.value || fallback).trim(); }
+function getQuoteLineItems() {
+  const current = lastResult ? [{ description: lastResult.jobName || "Nome/descrição do produto", quantity: 1, unitPrice: lastResult.finalPrice }] : [];
+  return [...quoteItems, ...current];
+}
+
+function renderQuoteItemsSummary() {
+  const wrap = el("quoteItemsSummary");
+  const list = el("quoteItemsList");
+  el("quoteItemsCount").textContent = String(quoteItems.length);
+  list.innerHTML = quoteItems.map((item, index) => `<li><span>${index + 1}. ${quoteEscape(item.description)}</span><b>${quoteMoney(item.unitPrice)}</b></li>`).join("");
+  wrap.hidden = quoteItems.length === 0;
+}
+
+function renderQuoteItemsEditor() {
+  const editor = el("quoteItemsEditor");
+  editor.innerHTML = quoteDraftItems.map((item, index) => `
+    <div class="quote-item-editor" data-quote-index="${index}">
+      <div class="field"><label for="quoteItemDesc${index}">Item ${String(index + 1).padStart(2, "0")} · Descrição</label><input id="quoteItemDesc${index}" data-quote-field="description" type="text" value="${quoteEscape(item.description)}" placeholder="Nome/descrição do produto"></div>
+      <div class="field"><label for="quoteItemQty${index}">Qtd.</label><input id="quoteItemQty${index}" data-quote-field="quantity" type="text" value="${quoteEscape(item.quantity)}" inputmode="decimal"></div>
+      <div class="field quote-item-price"><label for="quoteItemUnit${index}">Valor unit.</label><input id="quoteItemUnit${index}" data-quote-field="unitPrice" type="text" value="${quoteEscape(Number(item.unitPrice || 0).toFixed(2).replace(".", ","))}" inputmode="decimal"><button class="quote-remove-line" data-quote-remove="${index}" type="button" aria-label="Remover item">×</button></div>
+    </div>`).join("");
+}
 
 function updateProfessionalQuotePreview() {
-  if (!lastResult) return;
-  const qty1 = quoteNumberValue("quoteQty1");
-  const qty2 = quoteNumberValue("quoteQty2");
-  const unit1 = quoteNumberValue("quoteUnit1");
-  const unit2 = quoteNumberValue("quoteUnit2");
+  if (!quoteDraftItems.length) return;
+  const rows = el("quotePreviewRows");
+  let subtotal = 0;
+  rows.innerHTML = quoteDraftItems.map((item, index) => {
+    const quantity = quoteNumberValueFromValue(item.quantity);
+    const unitPrice = quoteNumberValueFromValue(item.unitPrice);
+    const lineTotal = quantity * unitPrice;
+    subtotal += lineTotal;
+    return `<tr><td>${String(index + 1).padStart(2, "0")}</td><td>${quoteEscape(item.description || "Nome/descrição do produto")}</td><td>${quoteEscape(quantity)}</td><td>${quoteMoney(unitPrice)}</td><td>${quoteMoney(lineTotal)}</td></tr>`;
+  }).join("");
   const freight = quoteNumberValue("quoteFreight");
-  const total1 = qty1 * unit1;
-  const total2 = qty2 * unit2;
-  const subtotal = total1 + total2;
-  const total = subtotal + freight;
   const set = (id, value) => { const node = el(id); if (node) node.textContent = value; };
   set("quotePreviewNumber", quoteInputValue("quoteNumber", "0001"));
   set("quotePreviewDate", quoteDateLabel(quoteInputValue("quoteDate")));
   set("quotePreviewClient", quoteInputValue("quoteClient", "Nome do cliente"));
   set("quotePreviewContact", quoteInputValue("quoteContact", "(XX) XXXXX-XXXX"));
-  set("quotePreviewItem1", quoteInputValue("quoteItem1", "Nome/descrição do produto"));
-  set("quotePreviewItem2", quoteInputValue("quoteItem2", "—") || "—");
-  set("quotePreviewQty1", String(qty1)); set("quotePreviewQty2", String(qty2));
-  set("quotePreviewUnit1", quoteMoney(unit1)); set("quotePreviewUnit2", quoteMoney(unit2));
-  set("quotePreviewTotal1", quoteMoney(total1)); set("quotePreviewTotal2", quoteMoney(total2));
-  set("quotePreviewSubtotal", quoteMoney(subtotal)); set("quotePreviewFreight", quoteMoney(freight));
-  set("quotePreviewTotal", quoteMoney(total));
+  set("quotePreviewSubtotal", quoteMoney(subtotal));
+  set("quotePreviewFreight", quoteMoney(freight));
+  set("quotePreviewTotal", quoteMoney(subtotal + freight));
   set("quotePreviewDays", quoteInputValue("quoteDays", "XX") || "XX");
 }
 
+function quoteNumberValueFromValue(value) {
+  const raw = String(value ?? "").trim().replace(/\s/g, "");
+  if (raw.includes(",")) return Number(raw.replace(/\./g, "").replace(",", ".")) || 0;
+  return Number(raw) || 0;
+}
+
 function hydrateProfessionalQuote() {
-  if (!lastResult || professionalQuoteHydrated) return;
+  if (professionalQuoteHydrated || (!lastResult && !quoteItems.length)) return;
   const today = new Date();
   el("quoteDate").value = `${String(today.getDate()).padStart(2, "0")}/${String(today.getMonth() + 1).padStart(2, "0")}/${today.getFullYear()}`;
-  el("quoteItem1").value = lastResult.jobName || "Nome/descrição do produto";
-  el("quoteUnit1").value = lastResult.finalPrice.toFixed(2).replace(".", ",");
+  quoteDraftItems = getQuoteLineItems().map((item) => ({ ...item }));
+  if (!quoteDraftItems.length) quoteDraftItems = [{ description: "Nome/descrição do produto", quantity: 1, unitPrice: 0 }];
+  renderQuoteItemsEditor();
   professionalQuoteHydrated = true;
 }
 
 function openProfessionalQuote() {
-  if (!lastResult) return;
-  hydrateProfessionalQuote(); updateProfessionalQuotePreview();
+  if (!lastResult && !quoteItems.length) return;
+  hydrateProfessionalQuote();
+  renderQuoteItemsEditor();
+  updateProfessionalQuotePreview();
   el("quoteModalOverlay").hidden = false;
 }
 
 function closeProfessionalQuote() { el("quoteModalOverlay").hidden = true; }
 
+function addCurrentItemToQuote() {
+  if (!lastResult) return;
+  quoteItems.push({ description: lastResult.jobName || "Nome/descrição do produto", quantity: 1, unitPrice: lastResult.finalPrice });
+  renderQuoteItemsSummary();
+  clearAll({ preserveItems: true });
+  quoteBtn.disabled = false;
+  showQuickToast(`Item adicionado ao orçamento (${quoteItems.length}). Preencha a próxima peça.`);
+}
+
+function addManualQuoteLine() {
+  quoteDraftItems.push({ description: "", quantity: 1, unitPrice: 0 });
+  renderQuoteItemsEditor();
+  updateProfessionalQuotePreview();
+}
+
 function buildProfessionalQuoteText() {
-  const qty1 = quoteNumberValue("quoteQty1"); const qty2 = quoteNumberValue("quoteQty2");
-  const unit1 = quoteNumberValue("quoteUnit1"); const unit2 = quoteNumberValue("quoteUnit2");
-  const freight = quoteNumberValue("quoteFreight"); const subtotal = qty1 * unit1 + qty2 * unit2; const total = subtotal + freight;
-  return [
-    "*Flip Design & Soluções 3D*", "Impressão 3D • Modelagem 3D • Prototipagem • Personalização • Peças Sob Medida • Miniaturas • Brindes Personalizados • Projetos 3D", "",
+  const subtotal = quoteDraftItems.reduce((sum, item) => sum + quoteNumberValueFromValue(item.quantity) * quoteNumberValueFromValue(item.unitPrice), 0);
+  const freight = quoteNumberValue("quoteFreight");
+  const lines = [
+    "*Flip Design & Soluções 3D*",
+    "Impressão 3D • Modelagem 3D • Prototipagem • Personalização • Peças Sob Medida • Miniaturas • Brindes Personalizados • Projetos 3D", "",
     `*ORÇAMENTO Nº:* ${quoteInputValue("quoteNumber", "0001")}`, `*DATA:* ${quoteDateLabel(quoteInputValue("quoteDate"))}`, "",
     "*DADOS DO CLIENTE*", `*Cliente:* ${quoteInputValue("quoteClient", "Nome do cliente")}`, `*Contato:* ${quoteInputValue("quoteContact", "(XX) XXXXX-XXXX")}`, "",
     "*ORÇAMENTO*", "Soluções personalizadas em impressão 3D, desenvolvidas para transformar ideias em produtos.", "",
-    `01 · ${quoteInputValue("quoteItem1", "Nome/descrição do produto")} · ${qty1} · ${quoteMoney(unit1)} · ${quoteMoney(qty1 * unit1)}`,
-    `02 · ${quoteInputValue("quoteItem2", "—") || "—"} · ${qty2} · ${quoteMoney(unit2)} · ${quoteMoney(qty2 * unit2)}`, "",
-    `*Subtotal:* ${quoteMoney(subtotal)}`, `*Frete/Entrega:* ${quoteMoney(freight)}`, `*TOTAL: ${quoteMoney(total)}*`, "",
+    ...quoteDraftItems.map((item, index) => { const qty = quoteNumberValueFromValue(item.quantity); const unit = quoteNumberValueFromValue(item.unitPrice); return `${String(index + 1).padStart(2, "0")} · ${item.description || "Nome/descrição do produto"} · ${qty} · ${quoteMoney(unit)} · ${quoteMoney(qty * unit)}`; }), "",
+    `*Subtotal:* ${quoteMoney(subtotal)}`, `*Frete/Entrega:* ${quoteMoney(freight)}`, `*TOTAL: ${quoteMoney(subtotal + freight)}*`, "",
     "*PAGAMENTO*", "*50% de entrada* no ato da aprovação do orçamento.", "*50% restantes* no dia da entrega do produto.",
     `*Prazo de produção:* ${quoteInputValue("quoteDays", "XX") || "XX"} dias úteis após a aprovação do orçamento e confirmação do pagamento da entrada.`, "",
-    "*OBSERVAÇÕES*", "- O prazo de produção começa a contar após a aprovação do orçamento e pagamento da entrada.",
-    "- Alterações no projeto após a aprovação poderão gerar custos adicionais.", "- Orçamento válido por *7 dias*.", "",
+    "*OBSERVAÇÕES*", "- O prazo de produção começa a contar após a aprovação do orçamento e pagamento da entrada.", "- Alterações no projeto após a aprovação poderão gerar custos adicionais.", "- Orçamento válido por *7 dias*.", "",
     "*Flip Design & Soluções 3D*", "Transformando ideias em realidade.",
-  ].join("\n");
+  ];
+  return lines.join("\n");
 }
 
 async function copyProfessionalQuote() {
@@ -2194,20 +2243,40 @@ async function copyProfessionalQuote() {
 function initProfessionalQuote() {
   const overlay = el("quoteModalOverlay");
   quoteBtn.addEventListener("click", openProfessionalQuote);
+  addItemBtn.addEventListener("click", addCurrentItemToQuote);
   el("closeQuoteBtn").addEventListener("click", closeProfessionalQuote);
   el("quotePrintBtn").addEventListener("click", () => window.print());
   el("quoteCopyBtn").addEventListener("click", copyProfessionalQuote);
+  el("quoteAddLineBtn").addEventListener("click", addManualQuoteLine);
   el("quoteWhatsappBtn").addEventListener("click", () => window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(buildProfessionalQuoteText())}`, "_blank", "noopener,noreferrer"));
   overlay.addEventListener("click", (event) => { if (event.target === overlay) closeProfessionalQuote(); });
   document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !overlay.hidden) closeProfessionalQuote(); });
-  ["quoteNumber","quoteDate","quoteClient","quoteContact","quoteItem1","quoteQty1","quoteUnit1","quoteItem2","quoteQty2","quoteUnit2","quoteFreight","quoteDays"]
-    .forEach((id) => el(id).addEventListener("input", updateProfessionalQuotePreview));
+  ["quoteNumber","quoteDate","quoteClient","quoteContact","quoteFreight","quoteDays"].forEach((id) => el(id).addEventListener("input", updateProfessionalQuotePreview));
+  el("quoteItemsEditor").addEventListener("input", (event) => {
+    const row = event.target.closest("[data-quote-index]");
+    if (!row) return;
+    const index = Number(row.dataset.quoteIndex);
+    const field = event.target.dataset.quoteField;
+    if (field) { quoteDraftItems[index][field] = event.target.value; updateProfessionalQuotePreview(); }
+  });
+  el("quoteItemsEditor").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-quote-remove]");
+    if (!button || quoteDraftItems.length <= 1) return;
+    quoteDraftItems.splice(Number(button.dataset.quoteRemove), 1);
+    renderQuoteItemsEditor(); updateProfessionalQuotePreview();
+  });
+  renderQuoteItemsSummary();
 }
 
 // ---------------------------------------------------------
 // LIMPAR TUDO — volta a página ao estado inicial, 100% vazio
 // ---------------------------------------------------------
-function clearAll() {
+function clearAll({ preserveItems = false } = {}) {
+  if (!preserveItems) {
+    quoteItems = [];
+    quoteDraftItems = [];
+    renderQuoteItemsSummary();
+  }
   jobNameInput.value = "";
   printerSelect.selectedIndex = 0;
   currentBudgetId = null;
@@ -2301,7 +2370,8 @@ function resetReadout() {
   copyBtn.classList.remove("copied");
   copyBtnLabel.textContent = "Copiar";
   exportPdfBtn.disabled = true;
-  quoteBtn.disabled = true;
+  quoteBtn.disabled = quoteItems.length === 0;
+  addItemBtn.disabled = true;
   el("saveBtn").disabled = true;
   el("saveBtnLabel").textContent = "Salvar";
   hidePdfExportError();

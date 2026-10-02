@@ -1400,3 +1400,19 @@ input[type="number"]{ -moz-appearance: textfield; appearance: textfield; }
   .professional-quote{ max-width:none; min-height:0; padding:18mm 16mm; box-shadow:none; }
   @page{ size:A4; margin:0; }
 }
+
+/* Múltiplos itens no orçamento */
+.quote-items-summary{ margin:14px 4px 0; padding:12px 14px; border:1px solid var(--gold-line); border-radius:var(--radius-sm); background:var(--gold-soft); color:var(--body); font-size:12px; }
+.quote-items-summary strong{ color:var(--gold); }
+.quote-items-summary ul{ display:flex; flex-direction:column; gap:5px; margin:8px 0 0; padding:0; list-style:none; }
+.quote-items-summary li{ display:flex; justify-content:space-between; gap:12px; color:var(--muted); }
+.quote-items-summary li b{ color:var(--text); font-family:var(--mono); font-size:11px; }
+.quote-item-editor{ position:relative; }
+.quote-item-price{ position:relative; padding-right:34px; }
+.quote-remove-line{ position:absolute; right:0; bottom:5px; width:28px; height:28px; border:1px solid var(--line-2); border-radius:7px; background:transparent; color:var(--muted); cursor:pointer; font-size:18px; line-height:1; }
+.quote-remove-line:hover{ border-color:var(--gold-line); color:var(--gold); }
+.quote-add-line{ margin-top:12px; padding:8px 12px; border:1px dashed var(--gold-line); border-radius:var(--radius-sm); background:transparent; color:var(--gold); cursor:pointer; font-size:12px; }
+.quote-add-line:hover{ background:var(--gold-soft); }
+@media (max-width:700px){
+  .quote-item-editor{ grid-template-columns:minmax(0,1fr) 70px 105px; }
+}
