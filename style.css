@@ -1,20 +1,20 @@
 /* =========================================================
-   NOSSO PROJETO 3D — CALCULADORA V3
-   Identidade compartilhada com o site e o catálogo:
-   - Fundo preto quente, linhas finas e o dourado da logo
+   FLIP — CALCULADORA V3
+   Identidade compartilhada com o Financeiro Flip:
+   - Fundo preto quente, linhas finas e o verde-limão da logo
    - Fraunces (títulos/preço) · Work Sans (corpo) · JetBrains Mono (rótulos)
-   - Rótulos "eyebrow" em mono espaçado, cantoneiras douradas no painel
-     de resultado (mesmo quadro da logo no site)
+   - Rótulos "eyebrow" em mono espaçado, cantoneiras verdes no painel
+     de resultado
    ========================================================= */
 
 :root{
   color-scheme: dark;
 
-  --bg: #0E0B07;
-  --bg-2: #141009;
-  --surface: #18130C;
-  --surface-2: #1F1810;
-  --line: #2A2217;
+  --bg: #120E09;
+  --bg-2: #16110B;
+  --surface: #17130D;
+  --surface-2: #1C170F;
+  --line: #241C12;
   --line-2: #3A3226;
 
   --text: #F4EFE3;
@@ -22,21 +22,21 @@
   --muted: #A69C87;
   --faint: #786F5C;
 
-  /* dourado da logo — --gold (texto/linhas), --gold-2 (brilho), fill p/ botões */
-  --gold: #D9B45A;
-  --gold-2: #E8C873;
-  --gold-deep: #C9A227;
-  --gold-line: rgba(217, 180, 90, 0.38);
-  --gold-soft: rgba(201, 162, 39, 0.12);
-  --gold-fill: linear-gradient(135deg, #E8C873 0%, #C9A227 100%);
-  --gold-text: linear-gradient(180deg, #F3DC9A 0%, #E0B955 55%, #C9A227 100%);
-  --on-gold: #140F06;
+  /* verde da marca — --gold (texto/linhas), --gold-2 (brilho), fill p/ botões */
+  --gold: #7DC917;
+  --gold-2: #B5E96E;
+  --gold-deep: #55940E;
+  --gold-line: rgba(125, 201, 23, 0.38);
+  --gold-soft: rgba(125, 201, 23, 0.12);
+  --gold-fill: linear-gradient(135deg, #B5E96E 0%, #55940E 100%);
+  --gold-text: linear-gradient(180deg, #D3F08C 0%, #9ED44A 55%, #55940E 100%);
+  --on-gold: #0E1503;
 
   --whatsapp: #25D366;
   --on-whatsapp: #06180C;
 
   /* barra de composição do preço */
-  --pie-filament: #D9B45A;
+  --pie-filament: #7DC917;
   --pie-energy: #8C8272;
   --pie-profit: #F4EFE3;
 
@@ -82,13 +82,13 @@
   --muted: #6E6350;
   --faint: #938770;
 
-  --gold: #8A6A12;
-  --gold-2: #A8801A;
-  --gold-deep: #8A6A12;
-  --gold-line: rgba(138, 106, 18, 0.35);
-  --gold-soft: rgba(201, 162, 39, 0.12);
-  --gold-fill: linear-gradient(135deg, #E3C267 0%, #C9A227 100%);
-  --gold-text: linear-gradient(180deg, #B08A22 0%, #8A6A12 100%);
+  --gold: #4A7F0C;
+  --gold-2: #55940E;
+  --gold-deep: #4A7F0C;
+  --gold-line: rgba(74, 127, 12, 0.35);
+  --gold-soft: rgba(125, 201, 23, 0.14);
+  --gold-fill: linear-gradient(135deg, #B5E96E 0%, #55940E 100%);
+  --gold-text: linear-gradient(180deg, #55940E 0%, #4A7F0C 100%);
 
   --pie-energy: #A99E89;
   --pie-profit: #2A2217;
@@ -117,18 +117,18 @@ html, body{
 
 body{
   min-height: 100vh;
-  /* brilho dourado discreto no topo, como no site */
+  /* brilho verde discreto no topo, como no Financeiro Flip */
   background:
-    radial-gradient(900px 480px at 85% -120px, rgba(201, 162, 39, .10), transparent 70%),
+    radial-gradient(900px 480px at 85% -120px, rgba(125, 201, 23, .10), transparent 70%),
     linear-gradient(var(--bg), var(--bg));
 }
 [data-theme="light"] body{
   background:
-    radial-gradient(900px 480px at 85% -120px, rgba(201, 162, 39, .14), transparent 70%),
+    radial-gradient(900px 480px at 85% -120px, rgba(125, 201, 23, .14), transparent 70%),
     linear-gradient(var(--bg), var(--bg));
 }
 
-::selection{ background: rgba(201, 162, 39, .35); color: var(--text); }
+::selection{ background: rgba(125, 201, 23, .35); color: var(--text); }
 
 button{ font: inherit; color: inherit; }
 a{ color: inherit; }
@@ -740,7 +740,7 @@ input[type="number"]{ -moz-appearance: textfield; appearance: textfield; }
   position: relative;
   padding: 22px 20px 20px;
   background:
-    radial-gradient(420px 220px at 80% 0%, rgba(201, 162, 39, .10), transparent 70%),
+    radial-gradient(420px 220px at 80% 0%, rgba(125, 201, 23, .10), transparent 70%),
     var(--surface);
   border: 1px solid var(--line);
   border-radius: 4px;
